@@ -112,8 +112,14 @@ $config = [
 $session = new Session($handler, $config);
 ```
 
-The `cookie_*` keys allow you to configure the session cookie settings.
+The `cookie_*` keys allow you to configure the [session cookie parameters](https://www.php.net/manual/en/function.session-set-cookie-params.php).
+
 The `sess_regenerate_duration` key is the number of seconds interval before a new session is automatically created (prevents session fixation).
+Set to `0` to disable automatically regenerating sessions.
+
+The `sess_lifetime` key is the number of seconds the session will be valid. Set to `0` for the session to be valid only "until the browser is closed".
+
+The `sess_gc_*` keys define the [probability](https://www.php.net/manual/en/session.configuration.php#ini.session.gc-probability) and [divisor](https://www.php.net/manual/en/session.configuration.php#ini.session.gc-divisor) for the garbage cleanup. 
 
 A new session is automatically started when the class is instantiated.
 
