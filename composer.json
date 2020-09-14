@@ -1,0 +1,40 @@
+{
+  "name": "bayfrontmedia/session-manager",
+  "description": "A framework agnostic PHP library to manage sessions using multiple storage options.",
+  "homepage": "https://github.com/bayfrontmedia/session-manager",
+  "license" : "MIT",
+  "version": "1.0.0",
+  "type": "library",
+  "keywords": [
+    "php",
+    "session"
+  ],
+  "authors": [
+    {
+      "name": "John Robinson",
+      "email": "john@bayfrontmedia.com",
+      "homepage": "https://www.bayfrontmedia.com",
+      "role": "Developer"
+    }
+  ],
+  "funding": [
+    {
+      "type": "patreon",
+      "url": "https://www.patreon.com/bayfrontmedia"
+    }
+  ],
+  "require": {
+    "php": ">=7.1.0",
+    "bayfrontmedia/php-array-helpers": "^1.0.1",
+    "bayfrontmedia/php-cookies": "^1.0.0",
+    "ext-pdo": "*"
+  },
+  "require-dev": {
+    "bayfrontmedia/filesystem-factory": "^1.1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Bayfront\\SessionManager\\": "src/"
+    }
+  }
+}
