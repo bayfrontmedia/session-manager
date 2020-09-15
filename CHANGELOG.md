@@ -12,6 +12,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Fixed` for any bug fixes.
 - `Security` in case of vulnerabilities
 
+## [1.0.1] - 2020.09.15
+
+### Fixed
+
+- Updated handler variable name in Session class.
+- Updated documentation.
+
 ## [1.0.0] - 2020.09.14
 
 ### Added
