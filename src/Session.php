@@ -16,7 +16,7 @@ use SessionHandlerInterface;
 class Session
 {
 
-    protected $adapter;
+    protected $handler;
 
     protected $config;
 
@@ -24,10 +24,10 @@ class Session
 
     protected static $session_started = false;
 
-    public function __construct(SessionHandlerInterface $adapter, array $config)
+    public function __construct(SessionHandlerInterface $handler, array $config)
     {
 
-        $this->adapter = $adapter;
+        $this->handler = $handler;
 
         $default_config = [
             'cookie_name' => 'bfm_sess',
@@ -53,7 +53,7 @@ class Session
             'sess_gc_divisor'
         ]);
 
-        session_set_save_handler($this->adapter, true);
+        session_set_save_handler($this->handler, true);
 
         session_set_cookie_params(
             $this->config['sess_lifetime'],
