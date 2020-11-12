@@ -3,7 +3,6 @@
   "description": "A framework agnostic PHP library to manage sessions using multiple storage options.",
   "homepage": "https://github.com/bayfrontmedia/session-manager",
   "license" : "MIT",
-  "version": "1.0.1",
   "type": "library",
   "keywords": [
     "php",

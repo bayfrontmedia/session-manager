@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Updated handler variable name in Session class.
+- Updated handler variable name in `Session` class.
 - Updated documentation.
 
 ## [1.0.0] - 2020.09.14
