@@ -18,7 +18,7 @@ John Robinson, [Bayfront Media](https://www.bayfrontmedia.com)
 
 ## Requirements
 
-* PHP >= 7.1.0
+* PHP >= 7.3.0
 * PDO PHP extension
 
 ## Installation
@@ -103,6 +103,7 @@ $config = [
     'cookie_domain' => '',
     'cookie_secure' => true,
     'cookie_http_only' => true,
+    'cookie_same_site' => 'Lax', // None, Lax or Strict
     'sess_regenerate_duration' => 300, // 0 to disable
     'sess_lifetime' => 3600, // 0 for "until the browser is closed"
     'sess_gc_probability' => 1, // 0 to disable garbage collection

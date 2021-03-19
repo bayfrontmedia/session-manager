@@ -35,6 +35,7 @@ class Session
             'cookie_domain' => '',
             'cookie_secure' => true,
             'cookie_http_only' => true,
+            'cookie_same_site' => 'Lax', // None, Lax or Strict
             'sess_regenerate_duration' => 300, // 0 to disable
             'sess_lifetime' => 3600, // 0 "until the browser is closed"
             'sess_gc_probability' => 1, // 0 to disable garbage collection
@@ -47,6 +48,7 @@ class Session
             'cookie_domain',
             'cookie_secure',
             'cookie_http_only',
+            'cookie_same_site',
             'sess_regenerate_duration',
             'sess_lifetime',
             'sess_gc_probability',
@@ -55,13 +57,14 @@ class Session
 
         session_set_save_handler($this->handler, true);
 
-        session_set_cookie_params(
-            $this->config['sess_lifetime'],
-            $this->config['cookie_path'],
-            $this->config['cookie_domain'],
-            $this->config['cookie_secure'],
-            $this->config['cookie_http_only']
-        );
+        session_set_cookie_params([
+            'lifetime' => $this->config['sess_lifetime'],
+            'path' => $this->config['cookie_path'],
+            'domain' => $this->config['cookie_domain'],
+            'secure' => $this->config['cookie_secure'],
+            'httponly' => $this->config['cookie_http_only'],
+            'samesite' => $this->config['cookie_same_site']
+        ]);
 
         $this->_start();
 
