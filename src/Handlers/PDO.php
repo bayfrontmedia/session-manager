@@ -1,12 +1,5 @@
 <?php
 
-/**
- * @package session-manager
- * @link https://github.com/bayfrontmedia/session-manager
- * @author John Robinson <john@bayfrontmedia.com>
- * @copyright 2020 Bayfront Media
- */
-
 namespace Bayfront\SessionManager\Handlers;
 
 use Bayfront\SessionManager\HandlerException;
@@ -16,9 +9,9 @@ use SessionHandlerInterface;
 class PDO implements SessionHandlerInterface
 {
 
-    protected $pdo;
+    protected \PDO $pdo;
 
-    protected $table;
+    protected string $table;
 
     /**
      * PDO constructor.
@@ -53,13 +46,13 @@ class PDO implements SessionHandlerInterface
     }
 
     /**
-     * @param string $save_path
-     * @param string $session_name (Name of cookie to be set)
+     * @param string $path
+     * @param string $name (Name of cookie to be set)
      *
      * @return bool
      */
 
-    public function open($save_path, $session_name): bool
+    public function open(string $path, string $name): bool
     {
         return true;
     }
@@ -77,12 +70,12 @@ class PDO implements SessionHandlerInterface
     }
 
     /**
-     * @param string $session_id
+     * @param string $id
      *
      * @return string
      */
 
-    public function read($session_id)
+    public function read(string $id): string
     {
 
         try {
@@ -90,7 +83,7 @@ class PDO implements SessionHandlerInterface
             $stmt = $this->pdo->prepare("SELECT contents FROM $this->table WHERE id = :id");
 
             $stmt->execute([
-                ':id' => $session_id
+                ':id' => $id
             ]);
 
             $read = $stmt->fetchColumn();
@@ -101,7 +94,7 @@ class PDO implements SessionHandlerInterface
 
             return '';
 
-        } catch (PDOException $e) {
+        } catch (PDOException) {
 
             return '';
 
@@ -110,13 +103,13 @@ class PDO implements SessionHandlerInterface
     }
 
     /**
-     * @param string $session_id
+     * @param string $id
      * @param string $data
      *
      * @return bool
      */
 
-    public function write($session_id, $data): bool
+    public function write(string $id, string $data): bool
     {
 
         try {
@@ -124,11 +117,11 @@ class PDO implements SessionHandlerInterface
             $stmt = $this->pdo->prepare("INSERT INTO $this->table (id, contents, last_active) values (:id, :contents, CURRENT_TIMESTAMP) ON DUPLICATE KEY UPDATE contents=:contents, last_active=CURRENT_TIMESTAMP");
 
             $stmt->execute([
-                ':id' => $session_id,
+                ':id' => $id,
                 ':contents' => $data
             ]);
 
-        } catch (PDOException $e) {
+        } catch (PDOException) {
 
             return false;
 
@@ -139,12 +132,12 @@ class PDO implements SessionHandlerInterface
     }
 
     /**
-     * @param string $session_id
+     * @param string $id
      *
      * @return bool
      */
 
-    public function destroy($session_id): bool
+    public function destroy(string $id): bool
     {
 
         try {
@@ -152,14 +145,14 @@ class PDO implements SessionHandlerInterface
             $stmt = $this->pdo->prepare("DELETE FROM $this->table WHERE id = :id");
 
             $stmt->execute([
-                ':id' => $session_id
+                ':id' => $id
             ]);
 
             if ($stmt->rowCount()) {
                 return true;
             }
 
-        } catch (PDOException $e) {
+        } catch (PDOException) {
 
             return false;
 
@@ -172,19 +165,19 @@ class PDO implements SessionHandlerInterface
     /**
      * This method should always return TRUE, even if no rows were deleted.
      *
-     * @param int $lifetime
+     * @param int $max_lifetime
      *
-     * @return bool
+     * @return int|false
      */
 
-    public function gc($lifetime): bool
+    public function gc(int $max_lifetime): int|false
     {
 
-        $stmt = $this->pdo->prepare("DELETE FROM $this->table WHERE last_active < DATE_SUB(NOW(), INTERVAL " . $lifetime . " SECOND)");
+        $stmt = $this->pdo->prepare("DELETE FROM $this->table WHERE last_active < DATE_SUB(NOW(), INTERVAL " . $max_lifetime . " SECOND)");
 
         $stmt->execute();
 
-        return true;
+        return $stmt->rowCount();
 
     }
 

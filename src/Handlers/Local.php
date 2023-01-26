@@ -1,12 +1,5 @@
 <?php
 
-/**
- * @package sesson-manager
- * @link https://github.com/bayfrontmedia/sesson-manager
- * @author John Robinson <john@bayfrontmedia.com>
- * @copyright 2020 Bayfront Media
- */
-
 namespace Bayfront\SessionManager\Handlers;
 
 use SessionHandlerInterface;
@@ -14,7 +7,7 @@ use SessionHandlerInterface;
 class Local implements SessionHandlerInterface
 {
 
-    protected $root;
+    protected string $root;
 
     public function __construct(string $root = '')
     {
@@ -22,13 +15,13 @@ class Local implements SessionHandlerInterface
     }
 
     /**
-     * @param string $save_path
-     * @param string $session_name (Name of cookie to be set)
+     * @param string $path
+     * @param string $name (Name of cookie to be set)
      *
      * @return bool
      */
 
-    public function open($save_path, $session_name): bool
+    public function open(string $path, string $name): bool
     {
 
         if (!is_dir($this->root)) {
@@ -62,17 +55,17 @@ class Local implements SessionHandlerInterface
     }
 
     /**
-     * @param string $session_id
+     * @param string $id
      *
      * @return string
      */
 
-    public function read($session_id)
+    public function read(string $id): string
     {
 
-        if (file_exists($this->root . '/sess_' . $session_id)) {
+        if (file_exists($this->root . '/sess_' . $id)) {
 
-            $read = file_get_contents($this->root . '/sess_' . $session_id);
+            $read = file_get_contents($this->root . '/sess_' . $id);
 
             if ($read) {
                 return $read;
@@ -85,29 +78,29 @@ class Local implements SessionHandlerInterface
     }
 
     /**
-     * @param string $session_id
+     * @param string $id
      * @param string $data
      *
      * @return bool
      */
 
-    public function write($session_id, $data): bool
+    public function write(string $id, string $data): bool
     {
-        return file_put_contents($this->root . '/sess_' . $session_id, $data);
+        return file_put_contents($this->root . '/sess_' . $id, $data);
     }
 
     /**
-     * @param string $session_id
+     * @param string $id
      *
      * @return bool
      */
 
-    public function destroy($session_id): bool
+    public function destroy(string $id): bool
     {
 
-        if (file_exists($this->root . '/sess_' . $session_id)) {
+        if (file_exists($this->root . '/sess_' . $id)) {
 
-            unlink($this->root . '/sess_' . $session_id);
+            unlink($this->root . '/sess_' . $id);
 
         }
 
@@ -118,25 +111,28 @@ class Local implements SessionHandlerInterface
     /**
      * This method should always return TRUE, even if no file was destroyed.
      *
-     * @param int $lifetime
+     * @param int $max_lifetime
      *
-     * @return bool
+     * @return int|false
      */
 
-    public function gc($lifetime): bool
+    public function gc(int $max_lifetime): int|false
     {
+
+        $i = 0;
 
         foreach (glob($this->root . '/sess_*') as $file) {
 
-            if (filemtime($file) < time() - $lifetime) {
+            if (filemtime($file) < time() - $max_lifetime) {
 
                 unlink($file);
+                $i++;
 
             }
 
         }
 
-        return true;
+        return $i;
 
     }
 

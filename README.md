@@ -1,6 +1,6 @@
 ## Session Manager
 
-A framework agnostic PHP library to manage sessions using multiple storage options.
+A framework-agnostic PHP library to manage sessions using multiple storage options.
 
 - [License](#license)
 - [Author](#author)
@@ -21,7 +21,7 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## Requirements
 
-* PHP >= 7.3.0
+* PHP `^8.0`
 * PDO PHP extension
 
 ## Installation
@@ -41,13 +41,7 @@ In addition, you may also create and use your own session handlers to be used wi
 
 **Flysystem**
 
-The Flysystem handler allows you to use a [Flysystem](https://github.com/thephpleague/flysystem) `League\Flysystem\Filesystem` instance for session storage.
-
-```
-use Bayfront\SessionManager\Handlers\Flysystem;
-
-$handler = new Flysystem($filesystem, '/root_path');
-```
+> The Flysystem handler was removed as of version 2.0.0. A replacement may be provided in the future.
 
 **Local**
 
