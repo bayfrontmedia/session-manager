@@ -1,12 +1,5 @@
 <?php
 
-/**
- * @package sesson-manager
- * @link https://github.com/bayfrontmedia/sesson-manager
- * @author John Robinson <john@bayfrontmedia.com>
- * @copyright 2020 Bayfront Media
- */
-
 namespace Bayfront\SessionManager;
 
 use Bayfront\ArrayHelpers\Arr;
@@ -16,13 +9,13 @@ use SessionHandlerInterface;
 class Session
 {
 
-    protected $handler;
+    protected SessionHandlerInterface $handler;
 
-    protected $config;
+    protected array $config;
 
-    protected $flash_data;
+    protected array $flash_data = [];
 
-    protected static $session_started = false;
+    protected static bool $session_started = false;
 
     public function __construct(SessionHandlerInterface $handler, array $config)
     {
@@ -220,12 +213,12 @@ class Session
      * Returns value of single $_SESSION array key in dot notation, or entire array, with optional default value.
      *
      * @param string|null $key (Returns the entire array when NULL)
-     * @param mixed $default
+     * @param mixed|null $default
      *
      * @return mixed
      */
 
-    public function get(string $key = NULL, $default = NULL)
+    public function get(string $key = NULL, mixed $default = NULL): mixed
     {
         if (NULL === $key) {
             return $_SESSION;
@@ -257,7 +250,7 @@ class Session
      * @return self
      */
 
-    public function set(string $key, $value): self
+    public function set(string $key, mixed $value): self
     {
 
         Arr::set($_SESSION, $key, $value);
@@ -269,12 +262,12 @@ class Session
     /**
      * Remove a single key, or an array of keys from the $_SESSION array using dot notation.
      *
-     * @param string|array $keys
+     * @param array|string $keys
      *
      * @return self
      */
 
-    public function forget($keys)
+    public function forget(array|string $keys): self
     {
 
         Arr::forget($_SESSION, $keys);
@@ -300,7 +293,7 @@ class Session
      * @return self
      */
 
-    public function flash(string $key, $value): self
+    public function flash(string $key, mixed $value): self
     {
 
         $this->set('__sess.flash_data.' . $key, $value);
@@ -320,7 +313,7 @@ class Session
      * @return mixed
      */
 
-    public function getFlash(string $key = NULL, $default = NULL)
+    public function getFlash(string $key = NULL, $default = NULL): mixed
     {
 
         if (NULL === $key) {
