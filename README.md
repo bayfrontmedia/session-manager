@@ -39,43 +39,35 @@ There are a variety of session handlers available, each with their own required 
 
 In addition, you may also create and use your own session handlers to be used with Session Manager.
 
-**Flysystem**
+**LocalHandler**
 
-> The Flysystem handler was removed as of version 2.0.0. A replacement may be provided in the future.
-
-**Local**
-
-The local handler allows you to store sessions in the local filesystem using native PHP.
+The `LocalHandler` allows you to store sessions in the local filesystem using native PHP.
 
 ```
-use Bayfront\SessionManager\Handlers\Local;
+use Bayfront\SessionManager\Handlers\LocalHandler;
 
-$handler = new Local('/root_path');
+$handler = new LocalHandler('/root_path');
 ```
 
-**PDO**
+**PdoHandler**
 
-The PDO handler allows you to use a `\PDO` instance for session storage in a database, and may throw a `Bayfront\SessionManager\HandlerException` exception in its constructor.
-
-To create a compatible table, execute the following statement:
+The `PdoHandler` allows you to use a `PDO` instance for session storage in a database.
 
 ```
-CREATE TABLE IF NOT EXISTS table_name (
-    `id` varchar(32) NOT NULL PRIMARY KEY, 
-    `contents` text NOT NULL, 
-    `last_active` TIMESTAMP NOT NULL ON UPDATE CURRENT_TIMESTAMP
-)
+use Bayfront\SessionManager\Handlers\PdoHandler;
+
+$dbh = new PDO('mysql:host=localhost;dbname=DATABASE_NAME', 'USERNAME', 'PASSWORD');
+
+// Pass the table name to be used in the constructor - "sessions" by default
+$handler = new PdoHandler($dbh, 'sessions');
 ```
 
-The PDO adapter will create/use a table named "sessions" unless otherwise specified in the constructor.
+Before using the `PdoHandler`, the required database table must be created with the `up` method, 
+and may throw a `Bayfront\SessionManager\HandlerException` exception:
 
 ```
-use Bayfront\SessionManager\Handlers\PDO;
-
 try {
-
-    $handler = new PDO($dbh, 'table_name');
-
+    $handler->up();
 } catch (HandlerException $e) {
     die($e->getMessage());
 }
@@ -89,10 +81,10 @@ In addition, a configuration array should be passed to the constructor.
 Unless otherwise specified, the default configuration will be used, as shown below:
 
 ```
-use Bayfront\SessionManager\Handlers\Local;
+use Bayfront\SessionManager\Handlers\LocalHandler;
 use Bayfront\SessionManager\Session;
 
-$handler = new Local('/root_path');
+$handler = new LocalHandler('/root_path');
 
 $config = [
     'cookie_name' => 'bfm_sess',

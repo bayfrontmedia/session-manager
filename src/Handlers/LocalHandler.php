@@ -4,7 +4,7 @@ namespace Bayfront\SessionManager\Handlers;
 
 use SessionHandlerInterface;
 
-class Local implements SessionHandlerInterface
+class LocalHandler implements SessionHandlerInterface
 {
 
     protected string $root;

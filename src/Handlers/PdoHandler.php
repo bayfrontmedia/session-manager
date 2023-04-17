@@ -3,33 +3,44 @@
 namespace Bayfront\SessionManager\Handlers;
 
 use Bayfront\SessionManager\HandlerException;
+use PDO;
 use PDOException;
 use SessionHandlerInterface;
 
-class PDO implements SessionHandlerInterface
+class PdoHandler implements SessionHandlerInterface
 {
 
-    protected \PDO $pdo;
+    protected PDO $pdo;
 
     protected string $table;
 
     /**
      * PDO constructor.
      *
-     * @param \PDO $pdo
+     * @param PDO $pdo
      * @param string $table
-     *
-     * @throws HandlerException
      */
 
-    public function __construct(\PDO $pdo, string $table = 'sessions')
+    public function __construct(PDO $pdo, string $table = 'sessions')
     {
 
-        $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION); // Throw exceptions
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // Throw exceptions
+
+        $this->pdo = $pdo;
+        $this->table = $table;
+
+    }
+
+    /**
+     * @return void
+     * @throws HandlerException
+     */
+    public function up(): void
+    {
 
         try {
 
-            $query = $pdo->prepare("CREATE TABLE IF NOT EXISTS $table (`id` varchar(32) NOT NULL PRIMARY KEY, `contents` text NOT NULL, `last_active` TIMESTAMP NOT NULL ON UPDATE CURRENT_TIMESTAMP)");
+            $query = $this->pdo->prepare("CREATE TABLE IF NOT EXISTS $this->table (`id` varchar(32) NOT NULL PRIMARY KEY, `contents` text NOT NULL, `last_active` TIMESTAMP NOT NULL ON UPDATE CURRENT_TIMESTAMP)");
 
             $query->execute();
 
@@ -38,10 +49,6 @@ class PDO implements SessionHandlerInterface
             throw new HandlerException($e->getMessage(), 0, $e);
 
         }
-
-        $this->pdo = $pdo;
-
-        $this->table = $table;
 
     }
 
