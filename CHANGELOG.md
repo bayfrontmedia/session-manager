@@ -12,6 +12,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Fixed` for any bug fixes.
 - `Security` in case of vulnerabilities
 
+## 3.0.0 - 2023.04.25
+
+### Added
+
+- Added `start()` method since sessions are no longer started when the `Session` class is instantiated.
+
+### Changed
+
+- Sessions will no longer be started when the `Session` class is instantiated. Instead, the `start()` method must be used.
+
 ## 2.1.0 - 2023.04.17
 
 ### Added
