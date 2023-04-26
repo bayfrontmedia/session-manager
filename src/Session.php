@@ -48,19 +48,6 @@ class Session
             'sess_gc_divisor'
         ]);
 
-        session_set_save_handler($this->handler, true);
-
-        session_set_cookie_params([
-            'lifetime' => $this->config['sess_lifetime'],
-            'path' => $this->config['cookie_path'],
-            'domain' => $this->config['cookie_domain'],
-            'secure' => $this->config['cookie_secure'],
-            'httponly' => $this->config['cookie_http_only'],
-            'samesite' => $this->config['cookie_same_site']
-        ]);
-
-        $this->_start();
-
     }
 
     /**
@@ -118,6 +105,29 @@ class Session
         $this->forget('__sess.flash_data'); // Remove array if existing
 
         return $this;
+
+    }
+
+    /**
+     * Start a new session.
+     *
+     * @return self
+     */
+    public function start(): self
+    {
+
+        session_set_save_handler($this->handler, true);
+
+        session_set_cookie_params([
+            'lifetime' => $this->config['sess_lifetime'],
+            'path' => $this->config['cookie_path'],
+            'domain' => $this->config['cookie_domain'],
+            'secure' => $this->config['cookie_secure'],
+            'httponly' => $this->config['cookie_http_only'],
+            'samesite' => $this->config['cookie_same_site']
+        ]);
+
+        return $this->_start();
 
     }
 
