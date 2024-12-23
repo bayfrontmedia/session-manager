@@ -228,7 +228,7 @@ class Session
      * @return mixed
      */
 
-    public function get(string $key = NULL, mixed $default = NULL): mixed
+    public function get(?string $key = NULL, mixed $default = NULL): mixed
     {
         if (NULL === $key) {
             return $_SESSION;
@@ -323,7 +323,7 @@ class Session
      * @return mixed
      */
 
-    public function getFlash(string $key = NULL, $default = NULL): mixed
+    public function getFlash(?string $key = NULL, $default = NULL): mixed
     {
 
         if (NULL === $key) {
