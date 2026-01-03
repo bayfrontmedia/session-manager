@@ -30,10 +30,10 @@ class RedisHandler implements SessionHandlerInterface
         $prefix = $this->key_prefix;
 
         if ($prefix !== '') {
-            $prefix = rtrim($prefix, ':') . ':';
+            return rtrim($prefix, ':') . ':';
         }
 
-        return $prefix . 'session:';
+        return $prefix;
 
     }
 

@@ -93,7 +93,7 @@ $client = new Client([
 ]);
 
 
-$handler = new RedisHandler($client, 3600, 'prod:');
+$handler = new RedisHandler($client, 3600, 'prod:session:');
 ```
 
 NOTE: When using the `RedisHandler`, Redis automatically deletes expired sessions based on the defined max lifetime.
