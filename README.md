@@ -26,7 +26,7 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## Installation
 
-```
+```shell
 composer require bayfrontmedia/session-manager
 ```
 
@@ -43,7 +43,7 @@ In addition, you may also create and use your own session handlers to be used wi
 
 The `LocalHandler` allows you to store sessions in the local filesystem using native PHP.
 
-```
+```php
 use Bayfront\SessionManager\Handlers\LocalHandler;
 
 $handler = new LocalHandler('/root_path');
@@ -53,7 +53,7 @@ $handler = new LocalHandler('/root_path');
 
 The `PdoHandler` allows you to use a `PDO` instance for session storage in a database.
 
-```
+```php
 use Bayfront\SessionManager\Handlers\PdoHandler;
 
 $dbh = new PDO('mysql:host=localhost;dbname=DATABASE_NAME', 'USERNAME', 'PASSWORD');
@@ -65,13 +65,39 @@ $handler = new PdoHandler($dbh, 'sessions');
 Before using the `PdoHandler`, the required database table must be created with the `up` method, 
 and may throw a `Bayfront\SessionManager\HandlerException` exception:
 
-```
+```php
 try {
     $handler->up();
 } catch (HandlerException $e) {
     die($e->getMessage());
 }
 ```
+
+**RedisHandler**
+
+The `RedisHandler` allows you to use a [Predis](https://github.com/predis/predis) `Client` instance 
+for session storage in Redis.
+
+The constructor requires a `Client` instance, along with the max lifetime value (in seconds). 
+An optional key prefix can also be defined.
+
+```php
+$client = new Client([
+    'scheme' => 'tcp',
+    'host' => '10.0.0.1',
+    'port' => 6379,
+    'tcp_nodelay' => true,
+    'persistent' => true,
+    'username' => 'USERNAME',
+    'password' => 'PASSWORD'
+]);
+
+
+$handler = new RedisHandler($client, 3600, 'prod:');
+```
+
+NOTE: When using the `RedisHandler`, Redis automatically deletes expired sessions based on the defined max lifetime.
+Therefore, the `sess_gc_probability` Session config value should be `0` to disable PHP's session garbage collection.
 
 ### Start using Session Manager
 
@@ -80,7 +106,7 @@ In addition, a configuration array should be passed to the constructor.
 
 Unless otherwise specified, the default configuration will be used, as shown below:
 
-```
+```php
 use Bayfront\SessionManager\Handlers\LocalHandler;
 use Bayfront\SessionManager\Session;
 
@@ -150,7 +176,7 @@ Start a new session.
 
 **Example:**
 
-```
+```php
 $session->start();
 ```
 
@@ -172,7 +198,7 @@ Destroy existing and start a new session.
 
 **Example:**
 
-```
+```php
 $session->startNew();
 ```
 
@@ -196,7 +222,7 @@ When `$delete_old_session = TRUE`, the old session file will be deleted.
 
 **Example:**
 
-```
+```php
 $session->regenerate();
 ```
 
@@ -218,7 +244,7 @@ Destroy the current session file and cookie.
 
 **Example:**
 
-```
+```php
 $session->destroy();
 ```
 
@@ -240,7 +266,7 @@ Return current session ID
 
 **Example:**
 
-```
+```php
 echo $session->getId();
 ```
 
@@ -262,7 +288,7 @@ Return the last active time of the session.
 
 **Example:**
 
-```
+```php
 echo $session->getLastActive();
 ```
 
@@ -284,7 +310,7 @@ Return the last regenerated time of the session.
 
 **Example:**
 
-```
+```php
 echo $session->getLastRegenerate();
 ```
 
@@ -307,7 +333,7 @@ Returns value of single `$_SESSION` array key in dot notation, or entire array, 
 
 **Example:**
 
-```
+```php
 echo $session->get('user.id');
 ```
 
@@ -329,7 +355,7 @@ Checks if `$_SESSION` array key exists in dot notation.
 
 **Example:**
 
-```
+```php
 if ($session->has('user.id')) {
     // Do something
 }
@@ -354,7 +380,7 @@ Sets a value for a `$_SESSION` key in dot notation.
 
 **Example:**
 
-```
+```php
 $session->set('user.id', 5);
 ```
 
@@ -374,7 +400,7 @@ Remove a single key, or an array of keys from the `$_SESSION` array using dot no
 
 **Example:**
 
-```
+```php
 $session->forget('user.id');
 ```
 
@@ -399,7 +425,7 @@ Flash data is available immediately and during the subsequent request.
 
 **Example:**
 
-```
+```php
 $session->flash('status', 'Task was successful');
 ```
 
@@ -422,7 +448,7 @@ Returns value of single flash data key in dot notation, or entire array, with op
 
 **Example:**
 
-```
+```php
 echo $session->getFlash('status');
 ```
 
@@ -444,7 +470,7 @@ Checks if flash data key exists in dot notation.
 
 **Example:**
 
-```
+```php
 if ($session->hasFlash('status')) {
     // Do something
 }
@@ -468,7 +494,7 @@ Keeps specific flash data keys available for the subsequent request.
 
 **Example:**
 
-```
+```php
 $session->keepFlash([
     'status'
 ]);
@@ -492,6 +518,6 @@ Keeps all flash data keys available for the subsequent request.
 
 **Example:**
 
-```
+```php
 $session->reflash();
 ```

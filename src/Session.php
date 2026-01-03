@@ -55,7 +55,6 @@ class Session
      *
      * @return self
      */
-
     protected function _start(): self
     {
 
@@ -75,9 +74,7 @@ class Session
         // -------------------- Regenerate --------------------
 
         if (!$this->has('__sess.last_regenerate')) {
-
             $this->set('__sess.last_regenerate', time());
-
         }
 
         if ($this->config['sess_regenerate_duration'] > 0
@@ -136,7 +133,6 @@ class Session
      *
      * @return self
      */
-
     public function startNew(): self
     {
         return $this->destroy()->_start();
@@ -148,15 +144,12 @@ class Session
      * When $delete_old_session = TRUE, the old session file will be deleted.
      *
      * @param bool $delete_old_session
-     *
      * @return self
      */
-
     public function regenerate(bool $delete_old_session = false): self
     {
 
         session_regenerate_id($delete_old_session);
-
         $this->set('__sess.last_regenerate', time());
 
         return $this;
@@ -168,18 +161,13 @@ class Session
      *
      * @return self
      */
-
     public function destroy(): self
     {
 
         session_unset();
-
         session_destroy();
-
         self::$session_started = false;
-
         $_SESSION = []; // Manually clear for this request
-
         Cookie::forget($this->config['cookie_name']); // Remove cookie
 
         return $this;
@@ -191,7 +179,6 @@ class Session
      *
      * @return string
      */
-
     public function getId(): string
     {
         return session_id();
@@ -202,7 +189,6 @@ class Session
      *
      * @return int
      */
-
     public function getLastActive(): int
     {
         return $this->get('__sess.last_active');
@@ -213,7 +199,6 @@ class Session
      *
      * @return int
      */
-
     public function getLastRegenerate(): int
     {
         return $this->get('__sess.last_regenerate');
@@ -224,10 +209,8 @@ class Session
      *
      * @param string|null $key (Returns the entire array when NULL)
      * @param mixed|null $default
-     *
      * @return mixed
      */
-
     public function get(?string $key = NULL, mixed $default = NULL): mixed
     {
         if (NULL === $key) {
@@ -242,10 +225,8 @@ class Session
      * Checks if $_SESSION array key exists in dot notation.
      *
      * @param string $key
-     *
      * @return bool
      */
-
     public function has(string $key): bool
     {
         return Arr::has($_SESSION, $key);
@@ -256,34 +237,24 @@ class Session
      *
      * @param string $key
      * @param mixed $value
-     *
      * @return self
      */
-
     public function set(string $key, mixed $value): self
     {
-
         Arr::set($_SESSION, $key, $value);
-
         return $this;
-
     }
 
     /**
      * Remove a single key, or an array of keys from the $_SESSION array using dot notation.
      *
      * @param array|string $keys
-     *
      * @return self
      */
-
     public function forget(array|string $keys): self
     {
-
         Arr::forget($_SESSION, $keys);
-
         return $this;
-
     }
 
     /*
@@ -299,19 +270,13 @@ class Session
      *
      * @param string $key
      * @param mixed $value
-     *
      * @return self
      */
-
     public function flash(string $key, mixed $value): self
     {
-
         $this->set('__sess.flash_data.' . $key, $value);
-
         $this->flash_data[$key] = $value; // Make available for current request
-
         return $this;
-
     }
 
     /**
@@ -319,10 +284,8 @@ class Session
      *
      * @param string|null $key (Returns the entire flash array when NULL)
      * @param null $default
-     *
      * @return mixed
      */
-
     public function getFlash(?string $key = NULL, $default = NULL): mixed
     {
 
@@ -338,10 +301,8 @@ class Session
      * Checks if flash data key exists in dot notation.
      *
      * @param string $key
-     *
      * @return bool
      */
-
     public function hasFlash(string $key): bool
     {
         return Arr::has($this->flash_data, $key);
@@ -351,19 +312,15 @@ class Session
      * Keeps specific flash data keys available for the subsequent request.
      *
      * @param array $keys
-     *
      * @return self
      */
-
     public function keepFlash(array $keys): self
     {
 
         foreach ($keys as $key) {
 
             if ($this->hasFlash($key)) {
-
                 $this->flash($key, $this->getFlash($key));
-
             }
 
         }
@@ -377,14 +334,11 @@ class Session
      *
      * @return self
      */
-
     public function reflash(): self
     {
 
         foreach ($this->flash_data as $k => $v) {
-
             $this->flash($k, $v);
-
         }
 
         return $this;
