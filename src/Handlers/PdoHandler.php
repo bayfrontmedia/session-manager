@@ -20,7 +20,6 @@ class PdoHandler implements SessionHandlerInterface
      * @param PDO $pdo
      * @param string $table
      */
-
     public function __construct(PDO $pdo, string $table = 'sessions')
     {
 
@@ -55,10 +54,8 @@ class PdoHandler implements SessionHandlerInterface
     /**
      * @param string $path
      * @param string $name (Name of cookie to be set)
-     *
      * @return bool
      */
-
     public function open(string $path, string $name): bool
     {
         return true;
@@ -70,7 +67,6 @@ class PdoHandler implements SessionHandlerInterface
      *
      * @return bool
      */
-
     public function close(): bool
     {
         return true;
@@ -78,10 +74,8 @@ class PdoHandler implements SessionHandlerInterface
 
     /**
      * @param string $id
-     *
      * @return string
      */
-
     public function read(string $id): string
     {
 
@@ -112,10 +106,8 @@ class PdoHandler implements SessionHandlerInterface
     /**
      * @param string $id
      * @param string $data
-     *
      * @return bool
      */
-
     public function write(string $id, string $data): bool
     {
 
@@ -140,10 +132,8 @@ class PdoHandler implements SessionHandlerInterface
 
     /**
      * @param string $id
-     *
      * @return bool
      */
-
     public function destroy(string $id): bool
     {
 
@@ -173,10 +163,8 @@ class PdoHandler implements SessionHandlerInterface
      * This method should always return TRUE, even if no rows were deleted.
      *
      * @param int $max_lifetime
-     *
      * @return int|false
      */
-
     public function gc(int $max_lifetime): int|false
     {
 

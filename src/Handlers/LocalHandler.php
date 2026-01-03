@@ -17,10 +17,8 @@ class LocalHandler implements SessionHandlerInterface
     /**
      * @param string $path
      * @param string $name (Name of cookie to be set)
-     *
      * @return bool
      */
-
     public function open(string $path, string $name): bool
     {
 
@@ -48,7 +46,6 @@ class LocalHandler implements SessionHandlerInterface
     /**
      * @return bool
      */
-
     public function close(): bool
     {
         return true;
@@ -56,10 +53,8 @@ class LocalHandler implements SessionHandlerInterface
 
     /**
      * @param string $id
-     *
      * @return string
      */
-
     public function read(string $id): string
     {
 
@@ -80,10 +75,8 @@ class LocalHandler implements SessionHandlerInterface
     /**
      * @param string $id
      * @param string $data
-     *
      * @return bool
      */
-
     public function write(string $id, string $data): bool
     {
         return file_put_contents($this->root . '/sess_' . $id, $data);
@@ -91,10 +84,8 @@ class LocalHandler implements SessionHandlerInterface
 
     /**
      * @param string $id
-     *
      * @return bool
      */
-
     public function destroy(string $id): bool
     {
 
@@ -112,10 +103,8 @@ class LocalHandler implements SessionHandlerInterface
      * This method should always return TRUE, even if no file was destroyed.
      *
      * @param int $max_lifetime
-     *
      * @return int|false
      */
-
     public function gc(int $max_lifetime): int|false
     {
 
