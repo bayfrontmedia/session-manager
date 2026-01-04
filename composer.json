@@ -26,8 +26,12 @@
     "php": "^8.0",
     "bayfrontmedia/php-array-helpers": "^2.0",
     "bayfrontmedia/php-cookies": "^2.0",
-    "predis/predis": "^3.3",
-    "ext-pdo": "*"
+    "predis/predis": "^3.3"
+
+  },
+  "suggest": {
+    "ext-pdo": "Required to use PdoHandler",
+    "ext-redis": "Required to use RedisHandler"
   },
   "autoload": {
     "psr-4": {

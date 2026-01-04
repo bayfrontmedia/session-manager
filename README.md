@@ -73,9 +73,9 @@ try {
 }
 ```
 
-**RedisHandler**
+**PredisHandler**
 
-The `RedisHandler` allows you to use a [Predis](https://github.com/predis/predis) `Client` instance 
+The `PredisHandler` allows you to use a [Predis](https://github.com/predis/predis) `Client` instance 
 for session storage in Redis.
 
 The constructor requires a `Client` instance, along with the max lifetime value (in seconds). 
@@ -93,7 +93,33 @@ $client = new Client([
 ]);
 
 
-$handler = new RedisHandler($client, 3600, 'prod:session:');
+$handler = new PredisHandler($client, 3600, 'prod:session:');
+```
+
+NOTE: When using the `PredisHandler`, Redis automatically deletes expired sessions based on the defined max lifetime.
+Therefore, the `sess_gc_probability` Session config value should be `0` to disable PHP's session garbage collection.
+
+**RedisHandler**
+
+The `RedisHandler` allows you to use a [Redis](https://github.com/phpredis/phpredis) instance using the 
+`redis` PHP extension for session storage in Redis.
+
+The constructor requires a `Redis` instance, along with the max lifetime value (in seconds).
+An optional key prefix can also be defined.
+
+```php
+$redis = new Redis();
+
+$redis->pconnect('10.0.0.1', 6379, 2, 'persist_id');
+
+$redis->auth([
+    'USERNAME',
+    'PASSWORD'
+]);
+
+$redis->setOption(Redis::OPT_PREFIX, 'global:prefix:');
+
+$handler = new RedisHandler($redis, 3600, 'prod:session:');
 ```
 
 NOTE: When using the `RedisHandler`, Redis automatically deletes expired sessions based on the defined max lifetime.

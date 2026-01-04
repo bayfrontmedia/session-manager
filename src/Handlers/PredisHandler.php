@@ -2,19 +2,19 @@
 
 namespace Bayfront\SessionManager\Handlers;
 
-use Redis;
+use Predis\Client;
 use SessionHandlerInterface;
 
-class RedisHandler implements SessionHandlerInterface
+class PredisHandler implements SessionHandlerInterface
 {
 
-    protected Redis $redis;
+    protected Client $client;
     protected int $max_lifetime; // In seconds
     protected string $key_prefix;
 
-    public function __construct(Redis $redis, int $max_lifetime, string $key_prefix = '')
+    public function __construct(Client $client, int $max_lifetime, string $key_prefix = '')
     {
-        $this->redis = $redis;
+        $this->client = $client;
         $this->max_lifetime = $max_lifetime;
         $this->key_prefix = $key_prefix;
     }
@@ -62,7 +62,7 @@ class RedisHandler implements SessionHandlerInterface
      */
     public function read(string $id): string
     {
-        return $this->redis->get($this->getKeyPrefix() . $id) ?? '';
+        return $this->client->get($this->getKeyPrefix() . $id) ?? '';
     }
 
     /**
@@ -72,7 +72,8 @@ class RedisHandler implements SessionHandlerInterface
      */
     public function write(string $id, string $data): bool
     {
-        return $this->redis->setex($this->getKeyPrefix() . $id, $this->max_lifetime, $data);
+        $status = $this->client->setex($this->getKeyPrefix() . $id, $this->max_lifetime, $data);
+        return $status->getPayload() === 'OK';
     }
 
     /**
@@ -81,7 +82,7 @@ class RedisHandler implements SessionHandlerInterface
      */
     public function destroy(string $id): bool
     {
-        return $this->redis->del($this->getKeyPrefix() . $id) > 0;
+        return $this->client->del($this->getKeyPrefix() . $id) > 0;
     }
 
     /**
