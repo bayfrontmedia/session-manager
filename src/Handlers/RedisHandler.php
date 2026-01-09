@@ -2,6 +2,7 @@
 
 namespace Bayfront\SessionManager\Handlers;
 
+use Bayfront\SessionManager\HandlerException;
 use Redis;
 use SessionHandlerInterface;
 
@@ -81,7 +82,10 @@ class RedisHandler implements SessionHandlerInterface
      */
     public function destroy(string $id): bool
     {
-        return $this->redis->del($this->getKeyPrefix() . $id) > 0;
+        if ($this->redis->del($this->getKeyPrefix() . $id) !== 1) {
+            throw new HandlerException('Redis unable to delete: ' . $this->getKeyPrefix() . $id);
+        }
+        //return $this->redis->del($this->getKeyPrefix() . $id) > 0;
     }
 
     /**
