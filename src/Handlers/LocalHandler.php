@@ -91,7 +91,7 @@ class LocalHandler implements SessionHandlerInterface
 
         if (file_exists($this->root . '/sess_' . $id)) {
 
-            unlink($this->root . '/sess_' . $id);
+            return unlink($this->root . '/sess_' . $id);
 
         }
 

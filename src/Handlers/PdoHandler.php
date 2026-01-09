@@ -141,21 +141,13 @@ class PdoHandler implements SessionHandlerInterface
 
             $stmt = $this->pdo->prepare("DELETE FROM $this->table WHERE id = :id");
 
-            $stmt->execute([
+            return $stmt->execute([
                 ':id' => $id
             ]);
 
-            if ($stmt->rowCount()) {
-                return true;
-            }
-
         } catch (PDOException) {
-
             return false;
-
         }
-
-        return false; // No rows affected
 
     }
 
