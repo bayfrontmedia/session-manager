@@ -149,8 +149,12 @@ class Session
     public function regenerate(bool $delete_old_session = false): self
     {
 
-        session_regenerate_id($delete_old_session);
-        $this->set('__sess.last_regenerate', time());
+        if (self::$session_started === true) {
+
+            session_regenerate_id($delete_old_session);
+            $this->set('__sess.last_regenerate', time());
+
+        }
 
         return $this;
 
@@ -164,11 +168,16 @@ class Session
     public function destroy(): self
     {
 
-        session_unset();
-        session_destroy();
-        self::$session_started = false;
-        $_SESSION = []; // Manually clear for this request
-        Cookie::forget($this->config['cookie_name']); // Remove cookie
+        if (self::$session_started === true) {
+
+            session_unset();
+            session_destroy();
+            $_SESSION = []; // Manually clear for this request
+            Cookie::forget($this->config['cookie_name']); // Remove cookie
+
+            self::$session_started = false;
+
+        }
 
         return $this;
 
