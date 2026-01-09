@@ -82,9 +82,14 @@ class RedisHandler implements SessionHandlerInterface
      */
     public function destroy(string $id): bool
     {
-        if ($this->redis->del($this->getKeyPrefix() . $id) !== 1) {
-            throw new HandlerException('Redis unable to delete: ' . $this->getKeyPrefix() . $id);
+        if ($this->redis->exists($this->getKeyPrefix() . $id)) {
+            if ($this->redis->del($this->getKeyPrefix() . $id) !== 1) {
+                throw new HandlerException('Redis unable to delete: ' . $this->getKeyPrefix() . $id);
+            }
         }
+
+        return true;
+
         //return $this->redis->del($this->getKeyPrefix() . $id) > 0;
     }
 
