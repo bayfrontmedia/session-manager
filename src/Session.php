@@ -173,7 +173,7 @@ class Session
             session_unset();
             session_destroy();
             $_SESSION = []; // Manually clear for this request
-            Cookie::forget($this->config['cookie_name']); // Remove cookie
+            Cookie::forget($this->config['cookie_name'], $this->config['cookie_path'], $this->config['cookie_domain'], $this->config['cookie_secure'], $this->config['cookie_http_only'], $this->config['cookie_same_site']); // Remove cookie
 
             self::$session_started = false;
 
