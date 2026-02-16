@@ -200,7 +200,7 @@ class Session
      */
     public function getLastActive(): int
     {
-        return $this->get('__sess.last_active');
+        return $this->get('__sess.last_active', 0);
     }
 
     /**
@@ -210,7 +210,7 @@ class Session
      */
     public function getLastRegenerate(): int
     {
-        return $this->get('__sess.last_regenerate');
+        return $this->get('__sess.last_regenerate', 0);
     }
 
     /**

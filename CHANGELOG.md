@@ -12,6 +12,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Fixed` for any bug fixes.
 - `Security` in case of vulnerabilities
 
+## [3.1.2] - 2026.02.16
+
+### Fixed
+
+- Fixed `session_regenerate_id` bug from handlers not returning `true` from `destroy` method
+- Fixed return type bugs
+
 ## [3.1.1] - 2026.01.08
 
 ### Fixed
