@@ -79,7 +79,8 @@ class LocalHandler implements SessionHandlerInterface
      */
     public function write(string $id, string $data): bool
     {
-        return file_put_contents($this->root . '/sess_' . $id, $data);
+        $result = file_put_contents($this->root . '/sess_' . $id, $data);
+        return is_int($result);
     }
 
     /**
@@ -90,9 +91,7 @@ class LocalHandler implements SessionHandlerInterface
     {
 
         if (file_exists($this->root . '/sess_' . $id)) {
-
-            return unlink($this->root . '/sess_' . $id);
-
+            unlink($this->root . '/sess_' . $id);
         }
 
         return true;

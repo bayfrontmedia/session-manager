@@ -83,7 +83,7 @@ class PredisHandler implements SessionHandlerInterface
     public function destroy(string $id): bool
     {
         if ($this->client->exists($this->getKeyPrefix() . $id)) {
-            return $this->client->del($this->getKeyPrefix() . $id) > 0;
+            $this->client->del($this->getKeyPrefix() . $id) > 0;
         }
 
         return true;
